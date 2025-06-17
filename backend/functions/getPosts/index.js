@@ -1,15 +1,6 @@
 const { CosmosClient } = require("@azure/cosmos");
 
 module.exports = async function (context, req) {
-  // Add CORS headers
-  context.res = {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    },
-  };
-
   // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {
     context.res.status = 200;
@@ -27,22 +18,12 @@ module.exports = async function (context, req) {
     const { resources } = await container.items.readAll().fetchAll();
 
     context.res = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
       status: 200,
       body: { posts: resources },
     };
   } catch (error) {
     console.error("Error in getPosts function:", error);
     context.res = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
       status: 500,
       body: { error: "Failed to retrieve posts", details: error.message },
     };

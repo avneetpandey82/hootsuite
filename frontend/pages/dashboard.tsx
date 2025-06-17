@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:7071/api/getPosts');
+      const response = await fetch('/api/getPosts');
       if (response.ok) {
         const data = await response.json();
         setPosts(data.posts || []);

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Paper, Typography, Button, Box, Snackbar, Alert } from '@mui/material';
+import { Paper, Typography, Button, Box, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { useRouter } from 'next/router';
 
 export default function PostCard({ caption }) {
   const [showCopySuccess, setShowCopySuccess] = useState(false);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
   const router = useRouter();
 
   const handleCopyToClipboard = async () => {
@@ -18,11 +19,20 @@ export default function PostCard({ caption }) {
   };
 
   const handleSchedulePost = () => {
+    setShowScheduleDialog(true);
+  };
+
+  const confirmSchedule = () => {
+    setShowScheduleDialog(false);
     // Navigate to schedule page with the caption as a query parameter
     router.push({
       pathname: '/schedule',
       query: { caption: encodeURIComponent(caption) }
     });
+  };
+
+  const cancelSchedule = () => {
+    setShowScheduleDialog(false);
   };
 
   return (
@@ -50,6 +60,7 @@ export default function PostCard({ caption }) {
           Schedule
         </Button>
       </Box>
+      
       <Snackbar
         open={showCopySuccess}
         autoHideDuration={2000}
@@ -60,6 +71,35 @@ export default function PostCard({ caption }) {
           Copied to clipboard!
         </Alert>
       </Snackbar>
+
+      {/* Schedule Confirmation Dialog */}
+      <Dialog
+        open={showScheduleDialog}
+        onClose={cancelSchedule}
+        aria-labelledby="schedule-dialog-title"
+        aria-describedby="schedule-dialog-description"
+      >
+        <DialogTitle id="schedule-dialog-title">
+          Schedule This Post?
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            You're about to navigate to the schedule page. Once you leave the generate page, 
+            you'll lose access to this generated post unless you copy it first.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            <strong>Tip:</strong> You can copy this post first, then schedule it later.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelSchedule} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmSchedule} color="primary" variant="contained">
+            Continue to Schedule
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 } 

@@ -1,5 +1,7 @@
 # Backend (contains sensitive credentials and local development files)
-backend/
+#backend
+backend/functions/local.settings.json
+backend/functions/host.json
 
 # Dependencies
 node_modules/
