@@ -133,6 +133,8 @@ export default function SchedulePage() {
           setDatetime('');
           setStatus('');
           setDateError('');
+          // Redirect to dashboard after successful scheduling
+          router.push('/dashboard');
         }, 2000);
       } else { 
         setStatus('Failed to schedule post.'); 
